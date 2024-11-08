@@ -1,0 +1,128 @@
+String amparo; 
+String tumor;
+
+PShape[] amp = new PShape[6];
+PShape[] tum = new PShape[5];
+
+float [][] posx1 = new float [6][420];
+float [][] posy1 = new float [6][420];
+
+float [][] posx2 = new float [5][420];
+float [][] posy2 = new float [5][400];
+
+PFont fonte;
+
+float t;
+float c; 
+
+PGraphics pg;
+
+
+void setup() {
+  
+  amparo = "AMPARO"; 
+  tumor = "TUMOR";
+
+  
+  //String[] fontList = PFont.list();
+  //printArray(fontList);
+
+  fonte = createFont("Futura-Bold", 170);
+  textFont(fonte);
+
+
+  size(1000, 700, P3D);
+  smooth(10);
+
+  for (int am = 0; am < amparo.length(); am++) {
+    amp[am] = fonte.getShape(amparo.charAt(int(am)));
+  }
+
+  for (int am = 0; am < amparo.length(); am++) {
+    for (int pr = 0; pr < amp[am].getVertexCount(); pr++) {
+      posx1[am][pr] = amp[am].getVertexX(pr)+120;
+      posy1[am][pr] = amp[am].getVertexY(pr)+350;
+    }
+  }
+  for (int tu = 0; tu < tumor.length(); tu++) {
+    tum[tu] = fonte.getShape(tumor.charAt(int(tu)));
+  }
+  for (int tu = 0; tu < tumor.length(); tu++) {
+    for (int mor = 0; mor < tum[tu].getVertexCount(); mor++) {
+      posx2[tu][mor] = tum[tu].getVertexX(mor)-550;
+      posy2[tu][mor] = tum[tu].getVertexY(mor)+210;
+    }
+  }
+    
+}
+
+void draw() {
+
+  t += 0.004;
+  c += 0.09;
+  
+
+  background(0);
+  
+  for (int am = 0; am < amparo.length(); am++) {
+
+    translate(am+85, 0);
+
+    pushMatrix();
+
+    beginShape();
+
+    for (int pr = 0; pr < amp[am].getVertexCount(); pr++) {
+
+
+      noStroke();
+
+      fill(
+        127+sin(pr*0.100+c)*127,
+        127+sin(pr*0.25+c)*127,
+        127+sin(pr*0.50+c)*127);
+
+      float sv = noise(posx1[am][pr]*0.012+t)*120;
+      float sy = noise(posy1[am][pr]*0.012+t)*180;
+
+      vertex(posx1[am][pr]+sv, posy1[am][pr]+sy);
+    }
+    endShape();
+    popMatrix();
+  }
+
+  for (int tu = 0; tu < tumor.length(); tu++) {
+
+    translate(tu+95, 0);
+
+    pushMatrix();
+
+    beginShape();
+
+    for (int mor = 0; mor < tum[tu].getVertexCount(); mor++) {
+
+      noStroke();
+
+      fill(
+        127+tan(mor*0.91+c)*127,
+        127+sin(mor*0.31+c)*127,
+        127+tan(mor*0.131+c)*127);
+
+      float li = noise(posx2[tu][mor]*0.024+t)*160;
+      float vu = noise(posy2[tu][mor]*0.024+t)*180;
+
+      vertex(posx2[tu][mor]+li, posy2[tu][mor]+vu);
+    }
+
+    endShape();
+
+    popMatrix();
+     
+    }
+    //if(frameCount == 1080){
+    //exit();
+    //}
+    //saveFrame("salva1/####.png");
+  }
+
+  
